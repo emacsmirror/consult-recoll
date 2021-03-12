@@ -1,0 +1,7 @@
+#+title: consult-recoll
+
+[[(https://www.lesbonscomptes.com/recoll/][recoll]] queries in emacs using consult.
+
+This package requires a working recoll index, and ~recollq~ in your
+path.  =M-x consult-recoll= to perform a query on the index using
+consult.

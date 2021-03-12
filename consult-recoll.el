@@ -32,12 +32,14 @@
 
 (require 'consult)
 
-(defvar consult-recoll--command
-  "recollq -a -F \"url title\" ARG"
-  "Command used to perform queries.")
+(defgroup consult-recoll nil
+  "Options for consult recoll."
+  :group 'consult)
 
-(defvar consult-recoll--open-fn #'find-file
-  "Function used to open candidate URL.")
+(defcustom consult-recoll-open-fn #'find-file
+  "Function used to open candidate URL.
+It receives a single argument, the full path to the file to open."
+  :type 'function)
 
 (defface consult-recoll-url-face '((t :inherit default))
   "Face used to display URLs of candidates.")
@@ -46,6 +48,10 @@
   "Face used to display titles of candidates.")
 
 (defvar consult-recoll-history nil "History for `consult-recoll'.")
+
+(defvar consult-recoll--command
+  "recollq -a -F \"url title\" ARG"
+  "Command used to perform queries.")
 
 (defun consult-recoll--transformer (str)
   "Decode STR, as returned by recollq."
@@ -62,7 +68,7 @@
 (defun consult-recoll--open (candidate)
   "Open file of corresponding completion CANDIDATE."
   (when (string-match ".+ (\\(.+\\))$" (or candidate ""))
-    (funcall consult-recoll--open-fn (match-string 1 candidate))))
+    (funcall consult-recoll-open-fn (match-string 1 candidate))))
 
 (defun consult-recoll--search (&optional initial)
   "Perform an asynchronous recoll search via `consult--read'.

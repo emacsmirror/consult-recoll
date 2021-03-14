@@ -1,4 +1,4 @@
-;;; consult-recoll.el --- Recoll searches using consult  -*- lexical-binding: t; -*-
+;;; consult-recoll.el --- Recoll queries using consult  -*- lexical-binding: t; -*-
 
 ;; Author: Jose A Ortega Ruiz <jao@gnu.org>
 ;; Maintainer: Jose A Ortega Ruiz
@@ -25,8 +25,10 @@
 
 ;;; Commentary:
 
-;; A simple consult-recoll function to perform simple queries over
-;; your Recoll (https://www.lesbonscomptes.com/recoll/) index.
+;; A `consult-recoll' command to perform simple interactive queries
+;; over your Recoll (https://www.lesbonscomptes.com/recoll/) index.
+;; See the corresponding custumization group for ways to tweak its
+;; behaviour to your needs.
 
 ;;; Code:
 
@@ -37,9 +39,19 @@
   :group 'consult)
 
 (defcustom consult-recoll-open-fn #'find-file
-  "Function used to open candidate URL.
-It receives a single argument, the full path to the file to open."
+  "Default function used to open candidate URL.
+It receives a single argument, the full path to the file to open.
+See also `consult-recoll-open-fns'"
   :type 'function)
+
+(defcustom consult-recoll-open-fns ()
+  "Alist mapping mime types to functions to open a selected candidate."
+  :type '(alist :key-type string :value-type function))
+
+(defcustom consult-recoll-format-candidate nil
+  "A function taking title, path and mime type, and formatting them for display.
+Set to nil to use the default 'title (path)' format."
+  :type '(choice (const nil) function))
 
 (defface consult-recoll-url-face '((t :inherit default))
   "Face used to display URLs of candidates.")
@@ -50,25 +62,35 @@ It receives a single argument, the full path to the file to open."
 (defvar consult-recoll-history nil "History for `consult-recoll'.")
 
 (defvar consult-recoll--command
-  "recollq -a -F \"url title\" ARG"
+  "recollq -a -F \"url title mtype\" ARG"
   "Command used to perform queries.")
 
 (defun consult-recoll--transformer (str)
   "Decode STR, as returned by recollq."
   (unless (string-match-p "^\\(Recoll query:\\|[0-9]+ results\\| *$\\)" str)
-    (let* ((cmps (split-string str " " t))
-           (url+title (seq-map #'base64-decode-string cmps))
-           (url (car url+title))
-           (title (or (cadr url+title) (file-name-base url)))
-           (url (if (string-prefix-p "file://" url) (substring url 7) url)))
-      (format "%s (%s)"
-              (propertize title 'face 'consult-recoll-title-face)
-              (propertize url 'face 'consult-recoll-url-face)))))
+    (let* ((cmps (split-string str " "))
+           (fields (seq-map #'base64-decode-string cmps))
+           (url (car fields))
+           (title (cadr fields))
+           (title (if (string= "" title) (file-name-base url) title))
+           (urln (if (string-prefix-p "file://" url) (substring url 7) url))
+           (mime (nth 2 fields))
+           (cand (if consult-recoll-format-candidate
+                     (funcall consult-recoll-format-candidate title urln mime)
+                   (format "%s (%s)"
+                           (propertize title 'face 'consult-recoll-title-face)
+                           (propertize urln 'face 'consult-recoll-url-face)))))
+      (propertize cand 'mime-type mime 'url urln))))
 
 (defun consult-recoll--open (candidate)
   "Open file of corresponding completion CANDIDATE."
-  (when (string-match ".+ (\\(.+\\))$" (or candidate ""))
-    (funcall consult-recoll-open-fn (match-string 1 candidate))))
+  (when candidate
+    (let ((url (get-text-property 0 'url candidate))
+          (opener (alist-get (get-text-property 0 'mime-type candidate)
+                             consult-recoll-open-fns
+                             (or consult-recoll-open-fn #'find-file)
+                             nil 'string=)))
+      (funcall opener url))))
 
 (defun consult-recoll--search (&optional initial)
   "Perform an asynchronous recoll search via `consult--read'.
@@ -78,6 +100,8 @@ If given, use INITIAL as the starting point of the query."
                    (consult--async-map #'consult-recoll--transformer))
                  :prompt "Recoll search: "
                  :require-match t
+                 :lookup (lambda (_ cs c)
+                           (seq-find (lambda (x) (string= c x)) cs))
                  :initial (concat consult-async-default-split initial)
                  :history 'consult-recoll-history
                  :category 'recoll-result))

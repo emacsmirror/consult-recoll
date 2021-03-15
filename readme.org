@@ -3,5 +3,9 @@
 [[(https://www.lesbonscomptes.com/recoll/][recoll]] queries in emacs using consult.
 
 This package requires a working recoll index, and ~recollq~ in your
-path.  =M-x consult-recoll= to perform a query on the index using
-consult.
+path.
+
+  - =M-x consult-recoll= to perform a query on the index using
+    consult.
+  - See also the associated customization group for ways to tweak the
+    command's behaviours (e.g., how the selected candidate is visited).

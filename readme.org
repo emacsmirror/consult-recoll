@@ -1,6 +1,6 @@
 #+title: consult-recoll
 
-[[(https://www.lesbonscomptes.com/recoll/][recoll]] queries in emacs using consult.
+[[https://www.lesbonscomptes.com/recoll/][Recoll]] queries in emacs using consult.
 
 This package requires a working recoll index, and ~recollq~ in your
 path.

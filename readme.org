@@ -1,6 +1,6 @@
 #+title: consult-recoll
 
-[[https://www.lesbonscomptes.com/recoll/][Recoll]] queries in emacs using consult.
+[[https://www.lesbonscomptes.com/recoll/][Recoll]] queries in emacs using [[https://github.com/minad/consult][consult]].
 
 This package requires a working recoll index, and ~recollq~ in your
 path.
@@ -8,4 +8,4 @@ path.
   - =M-x consult-recoll= to perform a query on the index using
     consult.
   - See also the associated customization group for ways to tweak the
-    command's behaviours (e.g., how the selected candidate is visited).
+    command's behaviour (e.g., how the selected candidate is visited).

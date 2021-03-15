@@ -32,11 +32,16 @@
 
 ;;; Code:
 
+(require 'seq)
 (require 'consult)
 
 (defgroup consult-recoll nil
   "Options for consult recoll."
   :group 'consult)
+
+(defcustom consult-recoll-prompt "Recoll search: "
+  "Prompt used by `consult-recoll'."
+  :type 'string)
 
 (defcustom consult-recoll-open-fn #'find-file
   "Default function used to open candidate URL.
@@ -98,7 +103,7 @@ If given, use INITIAL as the starting point of the query."
   (consult--read (consult--async-command consult-recoll--command
                    (consult--async-filter (lambda (x) (not (null x))))
                    (consult--async-map #'consult-recoll--transformer))
-                 :prompt "Recoll search: "
+                 :prompt consult-recoll-prompt
                  :require-match t
                  :lookup (lambda (_ cs c)
                            (seq-find (lambda (x) (string= c x)) cs))

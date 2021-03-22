@@ -27,7 +27,7 @@
 
 ;; A `consult-recoll' command to perform simple interactive queries
 ;; over your Recoll (https://www.lesbonscomptes.com/recoll/) index.
-;; See the corresponding custumization group for ways to tweak its
+;; See the corresponding customization group for ways to tweak its
 ;; behaviour to your needs.
 
 ;;; Code:
@@ -101,7 +101,7 @@ Set to nil to use the default 'title (path)' format."
   "Perform an asynchronous recoll search via `consult--read'.
 If given, use INITIAL as the starting point of the query."
   (consult--read (consult--async-command consult-recoll--command
-                   (consult--async-filter (lambda (x) (not (null x))))
+                   (consult--async-filter #'identity)
                    (consult--async-map #'consult-recoll--transformer))
                  :prompt consult-recoll-prompt
                  :require-match t

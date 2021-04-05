@@ -33,6 +33,7 @@
 ;;; Code:
 
 (require 'seq)
+(require 'subr-x)
 (require 'consult)
 
 (defgroup consult-recoll nil

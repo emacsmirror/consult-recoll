@@ -106,8 +106,7 @@ If given, use INITIAL as the starting point of the query."
                    (consult--async-map #'consult-recoll--transformer))
                  :prompt consult-recoll-prompt
                  :require-match t
-                 :lookup (lambda (_ cs c)
-                           (seq-find (lambda (x) (string= c x)) cs))
+                 :lookup #'consult--lookup-member
                  :initial (concat consult-async-default-split initial)
                  :history 'consult-recoll-history
                  :category 'recoll-result))

@@ -5,7 +5,7 @@
 ;; Keywords: docs, convenience
 ;; License: GPL-3.0-or-later
 ;; Version: 0.1
-;; Package-Requires: ((emacs "26.1") (consult "0.5"))
+;; Package-Requires: ((emacs "26.1") (consult "0.8"))
 ;; Homepage: https://codeberg.org/jao/consult-recoll
 
 ;; Copyright (C) 2021  Jose A Ortega Ruiz
@@ -107,7 +107,7 @@ If given, use INITIAL as the starting point of the query."
                  :prompt consult-recoll-prompt
                  :require-match t
                  :lookup #'consult--lookup-member
-                 :initial (concat consult-async-default-split initial)
+                 :initial (consult--async-split-initial initial)
                  :history 'consult-recoll-history
                  :category 'recoll-result))
 

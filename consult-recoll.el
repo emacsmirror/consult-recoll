@@ -4,8 +4,8 @@
 ;; Maintainer: Jose A Ortega Ruiz
 ;; Keywords: docs, convenience
 ;; License: GPL-3.0-or-later
-;; Version: 0.1
-;; Package-Requires: ((emacs "26.1") (consult "0.8"))
+;; Version: 0.2
+;; Package-Requires: ((emacs "26.1") (consult "0.9"))
 ;; Homepage: https://codeberg.org/jao/consult-recoll
 
 ;; Copyright (C) 2021  Jose A Ortega Ruiz
@@ -67,9 +67,9 @@ Set to nil to use the default 'title (path)' format."
 
 (defvar consult-recoll-history nil "History for `consult-recoll'.")
 
-(defvar consult-recoll--command
-  "recollq -a -F \"url title mtype\" ARG"
-  "Command used to perform queries.")
+(defun consult-recoll--command (text)
+  "Command used to perform queries for TEXT."
+  `("recollq" "-a" "-F" "url title mtype" ,text))
 
 (defun consult-recoll--transformer (str)
   "Decode STR, as returned by recollq."
@@ -101,7 +101,8 @@ Set to nil to use the default 'title (path)' format."
 (defun consult-recoll--search (&optional initial)
   "Perform an asynchronous recoll search via `consult--read'.
 If given, use INITIAL as the starting point of the query."
-  (consult--read (consult--async-command consult-recoll--command
+  (consult--read (consult--async-command
+                     #'consult-recoll--command
                    (consult--async-filter #'identity)
                    (consult--async-map #'consult-recoll--transformer))
                  :prompt consult-recoll-prompt

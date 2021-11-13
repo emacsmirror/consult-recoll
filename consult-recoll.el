@@ -44,6 +44,12 @@
   "Prompt used by `consult-recoll'."
   :type 'string)
 
+(defcustom consult-recoll-search-flags '("-a")
+  "List of flags used to perform queries via recollq."
+  :type '(choice (const :tag "Query language" nil)
+                 (const :tag "All terms" ("-a"))
+                 (list string)))
+
 (defcustom consult-recoll-open-fn #'find-file
   "Default function used to open candidate URL.
 It receives a single argument, the full path to the file to open.
@@ -69,18 +75,15 @@ Set to nil to use the default 'title (path)' format."
 
 (defun consult-recoll--command (text)
   "Command used to perform queries for TEXT."
-  `("recollq" "-a" "-F" "url title mtype" ,text))
+  `("recollq" ,@consult-recoll-search-flags ,text))
 
 (defun consult-recoll--transformer (str)
   "Decode STR, as returned by recollq."
-  (unless (string-match-p "^\\(Recoll query:\\|[0-9]+ results\\| *$\\)" str)
-    (let* ((cmps (split-string str " "))
-           (fields (seq-map #'base64-decode-string cmps))
-           (url (car fields))
-           (title (cadr fields))
-           (title (if (string= "" title) (file-name-base url) title))
+  (when (string-match "^\\([^[]+\\)\t\\[\\([^]]+\\)\\]\t\\[\\([^[]+\\)\\]" str)
+    (let* ((mime (match-string 1 str))
+           (url (match-string 2 str))
+           (title (match-string 3 str))
            (urln (if (string-prefix-p "file://" url) (substring url 7) url))
-           (mime (nth 2 fields))
            (cand (if consult-recoll-format-candidate
                      (funcall consult-recoll-format-candidate title urln mime)
                    (format "%s (%s)"

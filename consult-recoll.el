@@ -117,10 +117,12 @@ If given, use INITIAL as the starting point of the query."
                  :category 'recoll-result))
 
 ;;;###autoload
-(defun consult-recoll ()
-  "Consult recoll's local index."
-  (interactive)
-  (consult-recoll--open (consult-recoll--search)))
+(defun consult-recoll (ask)
+  "Consult recoll's local index.
+With prefix argument ASK, the user is prompted for an initial query string."
+  (interactive "P")
+  (let ((initial (when ask (read-string "Initial query: "))))
+    (consult-recoll--open (consult-recoll--search initial))))
 
 (provide 'consult-recoll)
 ;;; consult-recoll.el ends here

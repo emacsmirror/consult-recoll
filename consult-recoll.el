@@ -113,7 +113,7 @@ If given, use INITIAL as the starting point of the query."
                  :lookup #'consult--lookup-member
                  :sort nil
                  :initial (consult--async-split-initial initial)
-                 :history 'consult-recoll-history
+                 :history '(:input consult-recoll-history)
                  :category 'recoll-result))
 
 ;;;###autoload

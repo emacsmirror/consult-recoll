@@ -111,6 +111,7 @@ If given, use INITIAL as the starting point of the query."
                  :prompt consult-recoll-prompt
                  :require-match t
                  :lookup #'consult--lookup-member
+                 :sort nil
                  :initial (consult--async-split-initial initial)
                  :history 'consult-recoll-history
                  :category 'recoll-result))

@@ -121,7 +121,8 @@ If given, use INITIAL as the starting point of the query."
   "Consult recoll's local index.
 With prefix argument ASK, the user is prompted for an initial query string."
   (interactive "P")
-  (let ((initial (when ask (read-string "Initial query: "))))
+  (let ((initial (when ask
+                   (if (stringp ask) ask (read-string "Initial query: ")))))
     (consult-recoll--open (consult-recoll--search initial))))
 
 (provide 'consult-recoll)

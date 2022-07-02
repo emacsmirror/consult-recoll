@@ -10,22 +10,21 @@ path.
   - See also the associated customization group for ways to tweak the
     command's behaviour (e.g., how the selected candidate is visited).
 
-* Tips
+*** Tips
+***** Two-level filtering
 
-*** Two-level filtering
+      ~consult-recoll~ builds on the asychronous logic inside =consult.el=,
+      so you can use consult's handy [[https://github.com/minad/consult#asynchronous-search][two-level filtering]], which allows
+      searching over the results of a query. For example, if you start
+      typing
 
-    ~consult-recoll~ builds on the asychronous logic inside =consult.el=,
-    so you can use consult's handy [[https://github.com/minad/consult#asynchronous-search][two-level filtering]], which allows
-    searching over the results of a query. For example, if you start
-    typing
+            #goedel's theorem
 
-          #goedel's theorem
+      see a bunch of results, and want to narrow them to those lines
+      matching, say, "hofstadter", you can type ~#~ (which stops further
+      recoll queries) followed by the term you're interested in:
 
-    see a bunch of results, and want to narrow them to those lines
-    matching, say, "hofstadter", you can type ~#~ (which stops further
-    recoll queries) followed by the term you're interested in:
+            #goedel's theorem#hofstadter
 
-          #goedel's theorem#hofstadter
-
-    at which point only matches containing "hofstadter" will be
-    offered.
+      at which point only matches containing "hofstadter" will be
+      offered.

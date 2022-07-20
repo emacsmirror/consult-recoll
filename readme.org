@@ -1,18 +1,50 @@
-#+title: consult-recoll
+#+title: Recoll queries in emacs using consult
 
 * About
 
-[[https://www.lesbonscomptes.com/recoll/][Recoll]] queries in emacs using [[https://github.com/minad/consult][consult]].
+[[https://www.lesbonscomptes.com/recoll/][Recoll]] is a local search engine that knows how to index a wide variety of file
+formats, including PDFs, org and other text files and emails.  It also offers
+a sophisticated query language.
 
-This package requires a working recoll index, and ~recollq~ in your
-path.
+This package provides an emacs interface to perform recoll queries, and
+display its results, via [[https://github.com/minad/consult][consult]].
 
-  - =M-x consult-recoll= to perform a query on the index using
-    consult.
-  - See also the associated customization group for ways to tweak the
-    command's behaviour (e.g., how the selected candidate is visited).
+* Usage
+
+*** Searching
+
+    The entry point of ~consult-recoll~ is the interactive command
+    =consult-recoll=. Just invoke it (e.g., via =M-x consult-recoll=) to perform
+    any query and get its results dynamically displayed in the minibuffer,
+    with "live" updates as the query changes.  Selecting any of the candidate
+    results will open the associated file, using the functions in
+    ~consult-recoll-open-fns~ (see [[*Opening search results]] below).
+
+    By default, your input will be interpreted as a recoll query, in the
+    recoll query language (so you can issue queries like "author:jao@foo.io"
+    or "dir:/home/jao/docs mime:application/pdf where is wally", and so on).
+    You can fine tune how queries are issued by customizing
+    ~consult-recoll-search-flags~.
+
+*** Displaying results
+
+    For each matching result, consult-recoll retrieves its title, full file
+    name and mime type, and shows, by default, a line with the first two,
+    using the customizable faces ~consult-recoll-title-face~ and
+    ~consult-recoll-url-face~.  You can provide your own formatting function
+    (perhaps stripping common prefixes of the file name, or displaying also
+    the MIME) as the value of the customizable variable
+    ~consult-recoll-format-candidate~.
+
+*** Opening search results
+
+    When a search result candidate is selected, it's MIME type is used to
+    lookup a function to open its associated file in the customizable variable
+    ~consult-recoll-open-fns~.  If no entry is found, consult-recoll uses the
+    value of ~consult-open-fn~ as a default.
 
 * Tips
+
 *** Two-level filtering
 
     ~consult-recoll~ builds on the asychronous logic inside =consult.el=,

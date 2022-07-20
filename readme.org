@@ -18,7 +18,7 @@ display its results, via [[https://github.com/minad/consult][consult]].
     any query and get its results dynamically displayed in the minibuffer,
     with "live" updates as the query changes.  Selecting any of the candidate
     results will open the associated file, using the functions in
-    ~consult-recoll-open-fns~ (see [[*Opening search results]] below).
+    ~consult-recoll-open-fns~ (see [[#opening-results][Opening search results]] below).
 
     By default, your input will be interpreted as a recoll query, in the
     recoll query language (so you can issue queries like "author:jao@foo.io"
@@ -37,6 +37,9 @@ display its results, via [[https://github.com/minad/consult][consult]].
     ~consult-recoll-format-candidate~.
 
 *** Opening search results
+    :PROPERTIES:
+    :CUSTOM_ID: opening-results
+    :END:
 
     When a search result candidate is selected, it's MIME type is used to
     lookup a function to open its associated file in the customizable variable

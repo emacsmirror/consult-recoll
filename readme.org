@@ -81,7 +81,7 @@ display its results, via [[https://github.com/minad/consult][consult]].
     :CUSTOM_ID: opening-results
     :END:
 
-    When a search result candidate is selected, it's MIME type is used to
-    lookup a function to open its associated file in the customizable variable
+    When a search result candidate is selected, its MIME type is used to
+    look up a function to open its associated file in the customizable variable
     ~consult-recoll-open-fns~.  If no entry is found, consult-recoll uses the
     value of ~consult-open-fn~ as a default.

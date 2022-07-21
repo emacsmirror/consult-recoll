@@ -1,5 +1,16 @@
 #+title: Recoll queries in emacs using consult
 
+#+begin_export html
+<p align=right>
+<a href="https://melpa.org/#/consult-recoll">
+  <img alt="MELPA" src="https://melpa.org/packages/consult-recoll-badge.svg"/>
+</a>
+<a href="https://stable.melpa.org/#/consult-recoll">
+  <img alt="MELPA" src="https://stable.melpa.org/packages/consult-recoll-badge.svg"/>
+</a>
+</p>
+#+end_export
+
 * About
 
 [[https://www.lesbonscomptes.com/recoll/][Recoll]] is a local search engine that knows how to index a wide variety of file

@@ -21,9 +21,11 @@ text in the found document actually matching the query.
 This package provides an emacs interface to perform recoll queries, and
 display its results, via [[https://github.com/minad/consult][consult]].
 
+[[./consult-recoll.png]]
+
 * Usage
 
-*** Searching
+** Searching
 
     The entry point of ~consult-recoll~ is the interactive command
     =consult-recoll=. Just invoke it (e.g., via =M-x consult-recoll=) to perform
@@ -38,7 +40,7 @@ display its results, via [[https://github.com/minad/consult][consult]].
     You can fine tune how queries are issued by customizing
     ~consult-recoll-search-flags~.
 
-***** Tip: Two-level filtering
+*** Tip: Two-level filtering
 
       ~consult-recoll~ builds on the asychronous logic inside =consult.el=,
       so you can use consult's handy [[https://github.com/minad/consult#asynchronous-search][two-level filtering]], which allows
@@ -61,7 +63,7 @@ display its results, via [[https://github.com/minad/consult][consult]].
       offered.
 
 
-*** Displaying results
+** Displaying results
 
     For each matching result, ~consult-recoll~ retrieves its title, full file
     name and mime type, and shows, by default, a line with the first two in
@@ -71,12 +73,12 @@ display its results, via [[https://github.com/minad/consult][consult]].
     the MIME) as the value of the customizable variable
     ~consult-recoll-format-candidate~.
 
-    ~consult-recoll~ also uses consult's [[https://github.com/minad/consult#live-previews][live previews]] to show, for the each
+    ~consult-recoll~ also uses consult's [[https://github.com/minad/consult#live-previews][live previews]] to show, for each
     selected candidate hit, a buffer with further information, including
     snippets of the file (when provided by recoll).  The title, path and mime
     type of the document are also shown in previews.
 
-*** Opening search results
+** Opening search results
     :PROPERTIES:
     :CUSTOM_ID: opening-results
     :END:

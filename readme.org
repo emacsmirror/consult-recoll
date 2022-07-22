@@ -78,6 +78,26 @@ display its results, via [[https://github.com/minad/consult][consult]].
     snippets of the file (when provided by recoll).  The title, path and mime
     type of the document are also shown in previews.
 
+*** Tip: formatting results list
+    As mentioned, one can use ~consult-recoll-format-candidate~ to customize how
+    search results are shown in the minibufer.  For instance, i like to
+    shorten paths removing common prefixes and to show MIME types, so i use
+    a formatter similar to this one:
+    #+begin_src emacs-lisp
+      (defun jao-recoll-format (title url mime-type)
+        ;; remove from url the common prefixes /home/jao/{org/doc,doc,...}
+        (let* ((u (replace-regexp-in-string "/home/jao/" "" url))
+               (u (replace-regexp-in-string
+                   "\\(doc\\|org/doc\\|.emacs.d/gnus/Mail\\|var/mail\\)/" "" u)))
+          (format "%s (%s, %s)"
+                  (propertize title 'face 'consult-recoll-title-face)
+                  (propertize u 'face 'consult-recoll-url-face)
+                  (propertize mime-type 'face 'consult-recoll-mime-face))))
+
+
+      (setq consult-recoll-format-candidate #'jao-recoll-format)
+    #+end_src
+
 ** Opening search results
     :PROPERTIES:
     :CUSTOM_ID: opening-results

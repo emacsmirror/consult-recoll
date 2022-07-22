@@ -4,8 +4,8 @@
 ;; Maintainer: Jose A Ortega Ruiz
 ;; Keywords: docs, convenience
 ;; License: GPL-3.0-or-later
-;; Version: 0.4
-;; Package-Requires: ((emacs "26.1") (consult "0.9"))
+;; Version: 0.5
+;; Package-Requires: ((emacs "26.1") (consult "0.18"))
 ;; Homepage: https://codeberg.org/jao/consult-recoll
 
 ;; Copyright (C) 2021, 2022  Jose A Ortega Ruiz

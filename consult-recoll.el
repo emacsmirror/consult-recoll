@@ -122,7 +122,7 @@ Set to nil to use the default 'title (path)' format."
 (defvar consult-recoll--preview-buffer "*consult-recoll preview*")
 
 (defun consult-recoll--preview (action candidate)
-  "Preview search result CANDIDATE when ACTION is 'preview."
+  "Preview search result CANDIDATE when ACTION is \\='preview."
   (cond ((or (eq action 'setup) (null candidate))
          (with-current-buffer (get-buffer-create consult-recoll--preview-buffer)
            (delete-region (point-min) (point-max))))

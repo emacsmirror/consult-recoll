@@ -86,7 +86,7 @@ Set to nil to use the default 'title (path)' format."
   (setq consult-recoll--current text)
   `("recollq" ,@consult-recoll-search-flags ,text))
 
-(defconst consult-recoll--line-rx "^\\([^[]+\\)\t\\[\\([^]]+\\)\\]\t\\[\\([^[]+\\)\\]"
+(defconst consult-recoll--line-rx "^\\(.*?\\)\t\\[\\(.*?\\)\\]\t\\[\\(.*\\)\\]"
   "Regular expression decomposing result lines returned by recollq")
 
 (defun consult-recoll--transformer (str)

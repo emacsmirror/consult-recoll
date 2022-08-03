@@ -142,6 +142,7 @@ Set to nil to use the default 'title (path)' format."
   "Preview search result CANDIDATE when ACTION is \\='preview."
   (cond ((or (eq action 'setup) (null candidate))
          (with-current-buffer (get-buffer-create consult-recoll--preview-buffer)
+           (setq-local cursor-in-non-selected-windows nil)
            (delete-region (point-min) (point-max))))
         ((and (eq action 'preview) candidate)
          (when-let* ((url (consult-recoll--candidate-url candidate))
@@ -153,7 +154,8 @@ Set to nil to use the default 'title (path)' format."
              (insert (propertize url 'face 'consult-recoll-url-face) "\n")
              (insert (propertize (consult-recoll--candidate-mime candidate)
                                  'face 'consult-recoll-mime-face))
-             (when-let (s (consult-recoll--snippets candidate)) (insert "\n" s)))
+             (when-let (s (consult-recoll--snippets candidate)) (insert "\n" s))
+             (goto-char (point-min)))
            (pop-to-buffer buff)))
         ((eq action 'exit)
          (when (get-buffer consult-recoll--preview-buffer)

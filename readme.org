@@ -21,6 +21,8 @@ text in the found document actually matching the query.
 This package provides an emacs interface to perform recoll queries, and
 display its results, via [[https://github.com/minad/consult][consult]].
 
+[[./consult-recoll.png]]
+
 * Usage
 
 ** Searching
@@ -103,12 +105,15 @@ display its results, via [[https://github.com/minad/consult][consult]].
     Instead of relying on a separate preview buffer to display snippets, you
     can set ~consult-recoll-inline-snippets~ to ~t~ to show them in the minibuffer,
     as individual candidates.
+
+    [[./consult-recoll-inline.png]]
+
 *** Tip: disabling mime type groups
     By default, results are listed grouped by their mime type.  You can
     disable grouping by setting the customizable variable
     ~consult-recoll-group-by-mime~ to ~nil~.
 
-    [[./consult-recoll.png]]
+    [[./consult-recoll-no-groups.png]]
 
 ** Opening search results
    :PROPERTIES:

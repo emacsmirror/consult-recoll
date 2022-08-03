@@ -54,15 +54,24 @@
                  (const :tag "All terms" ("-a"))
                  (list string)))
 
-(defcustom consult-recoll-open-fn #'find-file
+(defcustom consult-recoll-open-fn nil
   "Default function used to open candidate URLs.
-It receives a single argument, the full path to the file to open.
-See also `consult-recoll-open-fns'"
-  :type 'function)
+It receives the full path to the file to open and (if
+`consult-recoll-inline-snippets' is set, a page number for the
+snippet at hand. If set to nil, find-file is used.  See also
+`consult-recoll-open-fns'"
+  :type '(choice (const nil) function))
 
 (defcustom consult-recoll-open-fns ()
-  "Alist mapping mime types to functions to open a selected candidate."
+  "Alist mapping mime types to functions to open a selected candidate.
+If you are setting `consult-list-snippets' to t, these functions
+will be called with two arguments (a file path and a page
+number), otherwise just with one."
   :type '(alist :key-type string :value-type function))
+
+(defcustom consult-recoll-inline-snippets nil
+  "Show snippets as completion candidates in the minibuffer."
+  :type 'boolean)
 
 (defcustom consult-recoll-group-by-mime t
   "When set, list search results grouped by mime type."
@@ -109,21 +118,28 @@ Set to nil to use the default 'title (path)' format."
 (defsubst consult-recoll--candidate-url (candidate)
   (get-text-property 0 'url candidate))
 
+(defsubst consult-recoll--candidate-page (candidate)
+  (get-text-property 0 'page candidate))
+
 (defsubst consult-recoll--candidate-index (candidate)
   (get-text-property 0 'index candidate))
 
 (defsubst consult-recoll--snippets (&optional candidate)
   (get-text-property 0 'snippets (or candidate consult-recoll--current)))
 
+(defsubst consult-recoll--find-file (file &optional _page) (find-file file))
+
 (defun consult-recoll--open (candidate)
   "Open file of corresponding completion CANDIDATE."
   (when candidate
     (let ((url (consult-recoll--candidate-url candidate))
-          (opener (alist-get (consult-recoll--candidate-mime candidate)
-                             consult-recoll-open-fns
-                             (or consult-recoll-open-fn #'find-file)
-                             nil 'string=)))
-      (funcall opener url))))
+          (open (alist-get (consult-recoll--candidate-mime candidate)
+                           consult-recoll-open-fns
+                           (or consult-recoll-open-fn 'consult-recoll--find-file)
+                           nil 'string=)))
+      (if consult-recoll-inline-snippets
+          (funcall open url (consult-recoll--candidate-page candidate))
+        (funcall open url)))))
 
 (defun consult-recoll--transformer (str)
   "Decode STR, as returned by recollq."
@@ -141,8 +157,16 @@ Set to nil to use the default 'title (path)' format."
                                   'index idx)))
            (setq consult-recoll--current cand)
            nil))
-        ((string= "/SNIPPETS" str) consult-recoll--current)
-        ((string= "SNIPPETS" str) nil)
+        ((string= "/SNIPPETS" str)
+         (and (not consult-recoll-inline-snippets) consult-recoll--current))
+        ((string= "SNIPPETS" str)
+         (and consult-recoll-inline-snippets consult-recoll--current))
+        ((and consult-recoll-inline-snippets consult-recoll--current)
+         (when-let* ((page (and (string-match "^\\([0-9]+\\) :" str)
+                                (match-string 1 str)))
+                     (pageno (and page (string-to-number page)))
+                     (props (text-properties-at 0 consult-recoll--current)))
+           (apply #'propertize (concat "    " str) 'page pageno props)))
         (consult-recoll--current
          (let ((snippets (concat (consult-recoll--snippets) "\n" str)))
            (setq consult-recoll--current
@@ -191,7 +215,8 @@ If given, use INITIAL as the starting point of the query."
                  :require-match t
                  :lookup #'consult--lookup-member
                  :sort nil
-                 :state #'consult-recoll--preview
+                 :state (and (not consult-recoll-inline-snippets)
+                             #'consult-recoll--preview)
                  :group (and consult-recoll-group-by-mime
                              #'consult-recoll--group)
                  :initial (consult--async-split-initial initial)

@@ -84,6 +84,7 @@ Set to nil to use the default 'title (path)' format."
 
 (defvar consult-recoll-history nil "History for `consult-recoll'.")
 (defvar consult-recoll--current nil)
+(defvar consult-recoll--index 0)
 
 (defun consult-recoll--command (text)
   "Command used to perform queries for TEXT."
@@ -105,10 +106,13 @@ Set to nil to use the default 'title (path)' format."
 (defsubst consult-recoll--candidate-mime (candidate)
   (get-text-property 0 'mime-type candidate))
 
-(defun consult-recoll--candidate-url (candidate)
+(defsubst consult-recoll--candidate-url (candidate)
   (get-text-property 0 'url candidate))
 
-(defun consult-recoll--snippets (&optional candidate)
+(defsubst consult-recoll--candidate-index (candidate)
+  (get-text-property 0 'index candidate))
+
+(defsubst consult-recoll--snippets (&optional candidate)
   (get-text-property 0 'snippets (or candidate consult-recoll--current)))
 
 (defun consult-recoll--open (candidate)
@@ -128,8 +132,13 @@ Set to nil to use the default 'title (path)' format."
                 (url (match-string 2 str))
                 (title (match-string 3 str))
                 (urln (if (string-prefix-p "file://" url) (substring url 7) url))
+                (idx (setq consult-recoll--index (1+ consult-recoll--index)))
                 (cand (consult-recoll--format title url mime))
-                (cand (propertize cand 'mime-type mime 'url urln 'title title)))
+                (cand (propertize cand
+                                  'mime-type mime
+                                  'url urln
+                                  'title title
+                                  'index idx)))
            (setq consult-recoll--current cand)
            nil))
         ((string= "/SNIPPETS" str) consult-recoll--current)
@@ -173,6 +182,7 @@ Set to nil to use the default 'title (path)' format."
   "Perform an asynchronous recoll search via `consult--read'.
 If given, use INITIAL as the starting point of the query."
   (setq consult-recoll--current nil)
+  (setq consult-recoll--index 0)
   (consult--read (consult--async-command
                      #'consult-recoll--command
                    (consult--async-filter #'identity)

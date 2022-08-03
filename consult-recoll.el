@@ -55,7 +55,7 @@
                  (list string)))
 
 (defcustom consult-recoll-open-fn #'find-file
-  "Default function used to open candidate URL.
+  "Default function used to open candidate URLs.
 It receives a single argument, the full path to the file to open.
 See also `consult-recoll-open-fns'"
   :type 'function)
@@ -63,6 +63,10 @@ See also `consult-recoll-open-fns'"
 (defcustom consult-recoll-open-fns ()
   "Alist mapping mime types to functions to open a selected candidate."
   :type '(alist :key-type string :value-type function))
+
+(defcustom consult-recoll-group-by-mime t
+  "When set, list search results grouped by mime type."
+  :type 'boolean)
 
 (defcustom consult-recoll-format-candidate nil
   "A function taking title, path and mime type, and formatting them for display.
@@ -161,6 +165,10 @@ Set to nil to use the default 'title (path)' format."
          (when (get-buffer consult-recoll--preview-buffer)
            (kill-buffer consult-recoll--preview-buffer)))))
 
+(defun consult-recoll--group (candidate transform)
+  "If TRANSFORM return candidate, othewise extract mime-type."
+  (if transform candidate (consult-recoll--candidate-mime candidate)))
+
 (defun consult-recoll--search (&optional initial)
   "Perform an asynchronous recoll search via `consult--read'.
 If given, use INITIAL as the starting point of the query."
@@ -174,6 +182,8 @@ If given, use INITIAL as the starting point of the query."
                  :lookup #'consult--lookup-member
                  :sort nil
                  :state #'consult-recoll--preview
+                 :group (and consult-recoll-group-by-mime
+                             #'consult-recoll--group)
                  :initial (consult--async-split-initial initial)
                  :history '(:input consult-recoll-history)
                  :category 'recoll-result))

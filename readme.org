@@ -98,6 +98,11 @@ display its results, via [[https://github.com/minad/consult][consult]].
       (setq consult-recoll-format-candidate #'jao-recoll-format)
     #+end_src
 
+*** Tip: disabling mime type groups
+    By default, results are listed grouped by their mime type.  You can
+    disable grouping by setting the customizable variable
+    ~consult-recoll-group-by-mime~ to ~nil~.
+
 ** Opening search results
     :PROPERTIES:
     :CUSTOM_ID: opening-results

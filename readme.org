@@ -143,3 +143,8 @@ display its results, via [[https://github.com/minad/consult][consult]].
       (add-to-list 'consult-recoll-open-fns
                    '("application/pdf" . open-pdf/zathura))
     #+end_src
+
+* Thanks
+
+  Thanks to [[https://codeberg.org/rougier][Nicholas P. Rougier]] for useful discussions and suggestions,
+  including actual fixes.

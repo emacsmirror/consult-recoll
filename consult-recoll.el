@@ -4,7 +4,7 @@
 ;; Maintainer: Jose A Ortega Ruiz
 ;; Keywords: docs, convenience
 ;; License: GPL-3.0-or-later
-;; Version: 0.5
+;; Version: 0.6
 ;; Package-Requires: ((emacs "26.1") (consult "0.18"))
 ;; Homepage: https://codeberg.org/jao/consult-recoll
 
@@ -27,12 +27,14 @@
 
 ;; A `consult-recoll' command to perform interactive queries (including life
 ;; previews of documment snippets) over your Recoll
-;; (https://www.lesbonscomptes.com/recoll/) index, using consult. Use
+;; (https://www.lesbonscomptes.com/recoll/) index, using consult.
+;;
+;; Use
 ;;
 ;;     M-x consult-recoll
 ;;
-;; to get started, and the corresponding customization group for ways to tweak
-;; its behaviour to your needs.
+;; to get started, and check the corresponding customization group for ways to
+;; tweak its behaviour to your needs.
 
 ;;; Code:
 

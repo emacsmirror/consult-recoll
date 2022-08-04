@@ -15,17 +15,15 @@
 
 [[https://www.lesbonscomptes.com/recoll/][Recoll]] is a local search engine that knows how to index a wide variety of file
 formats, including PDFs, org and other text files and emails.  It also offers
-a sophisticated query language, and, for some document kinds, snippets of the
-text in the found document actually matching the query.
+a sophisticated query language, and, for some document kinds, snippets in the
+the found documents actually matching the query at hand.
 
 This package provides an emacs interface to perform recoll queries, and
 display its results, via [[https://github.com/minad/consult][consult]].
 
 [[./consult-recoll.png]]
 
-* Usage
-
-** Searching
+* Searching
 
     The entry point of ~consult-recoll~ is the interactive command
     =consult-recoll=. Just invoke it (e.g., via =M-x consult-recoll=) to perform
@@ -40,7 +38,7 @@ display its results, via [[https://github.com/minad/consult][consult]].
     You can fine tune how queries are issued by customizing
     ~consult-recoll-search-flags~.
 
-*** Tip: Two-level filtering
+** Tip: Two-level filtering
 
       ~consult-recoll~ builds on the asychronous logic inside =consult.el=,
       so you can use consult's handy [[https://github.com/minad/consult#asynchronous-search][two-level filtering]], which allows
@@ -62,8 +60,7 @@ display its results, via [[https://github.com/minad/consult][consult]].
       at which point only matches containing "hofstadter" will be
       offered.
 
-
-** Displaying results
+* Displaying results
 
    For each matching result, ~consult-recoll~ retrieves its title, full file
    name and mime type, and shows, by default, a line with the first two in the
@@ -81,7 +78,7 @@ display its results, via [[https://github.com/minad/consult][consult]].
    See [[#opening-results][Opening search results]] below for ways of customizing how Emacs will
    open selected results.
 
-*** Tip: formatting results list
+** Example: formatting results list
     As mentioned, one can use ~consult-recoll-format-candidate~ to customize how
     search results are shown in the minibufer.  For instance, i like to
     shorten paths removing common prefixes and to show MIME types, so i use
@@ -101,21 +98,21 @@ display its results, via [[https://github.com/minad/consult][consult]].
       (setq consult-recoll-format-candidate #'jao-recoll-format)
     #+end_src
 
-*** Tip: displaying snippets in results list
+** Tip: displaying snippets in results list
     Instead of relying on a separate preview buffer to display snippets, you
     can set ~consult-recoll-inline-snippets~ to ~t~ to show them in the minibuffer,
     as individual candidates.
 
     [[./consult-recoll-inline.png]]
 
-*** Tip: disabling mime type groups
+** Tip: disabling mime type groups
     By default, results are listed grouped by their mime type.  You can
     disable grouping by setting the customizable variable
     ~consult-recoll-group-by-mime~ to ~nil~.
 
     [[./consult-recoll-no-groups.png]]
 
-** Opening search results
+* Opening search results
    :PROPERTIES:
    :CUSTOM_ID: opening-results
    :END:
@@ -130,7 +127,7 @@ display its results, via [[https://github.com/minad/consult][consult]].
    number (or ~nil~ if it is not available, e.g., because the selected candidate
    is the one showing the document data)
 
-*** Tip: PDF open with external viewer
+** Example: PDF open with external viewer
 
     For instance, if you want to use ~zathura~ to open PDF documents, you could
     define an elisp helper like:

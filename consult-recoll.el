@@ -99,6 +99,8 @@ Set to nil to use the default 'title (path)' format."
 
 (defun consult-recoll--command (text)
   "Command used to perform queries for TEXT."
+  (setq consult-recoll--current nil)
+  (setq consult-recoll--index 0)
   `("recollq" "-A" "-p" "5" ,@consult-recoll-search-flags ,text))
 
 (defconst consult-recoll--line-rx "^\\(.*?\\)\t\\[\\(.*?\\)\\]\t\\[\\(.*\\)\\]"
@@ -207,8 +209,6 @@ Set to nil to use the default 'title (path)' format."
 (defun consult-recoll--search (&optional initial)
   "Perform an asynchronous recoll search via `consult--read'.
 If given, use INITIAL as the starting point of the query."
-  (setq consult-recoll--current nil)
-  (setq consult-recoll--index 0)
   (consult--read (consult--async-command
                      #'consult-recoll--command
                    (consult--async-filter #'identity)

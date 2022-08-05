@@ -19,7 +19,9 @@ a sophisticated query language, and, for some document kinds, snippets in the
 the found documents actually matching the query at hand.
 
 This package provides an emacs interface to perform recoll queries, and
-display its results, via [[https://github.com/minad/consult][consult]].
+display its results, via [[https://github.com/minad/consult][consult]].  It is also recommened that you use a a
+package for vertical display of completions that works well with /consult/, such
+as [[https://github.com/minad/vertico][vertico]].
 
 [[./consult-recoll.png]]
 

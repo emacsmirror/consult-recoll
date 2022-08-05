@@ -4,7 +4,7 @@
 ;; Maintainer: Jose A Ortega Ruiz
 ;; Keywords: docs, convenience
 ;; License: GPL-3.0-or-later
-;; Version: 0.6
+;; Version: 0.6.1
 ;; Package-Requires: ((emacs "26.1") (consult "0.18"))
 ;; Homepage: https://codeberg.org/jao/consult-recoll
 
@@ -129,7 +129,7 @@ Set to nil to use the default 'title (path)' format."
   (get-text-property 0 'index candidate))
 
 (defsubst consult-recoll--snippets (&optional candidate)
-  (get-text-property 0 'snippets (or candidate consult-recoll--current)))
+  (get-text-property 0 'snippets (or candidate consult-recoll--current "")))
 
 (defsubst consult-recoll--find-file (file &optional _page) (find-file file))
 
@@ -159,12 +159,14 @@ Set to nil to use the default 'title (path)' format."
                                   'url urln
                                   'title title
                                   'index idx)))
-           (setq consult-recoll--current cand)
-           nil))
+           (prog1 (and (not (consult-recoll--snippets)) consult-recoll--current)
+             (setq consult-recoll--current cand))))
         ((string= "/SNIPPETS" str)
          (and (not consult-recoll-inline-snippets) consult-recoll--current))
         ((string= "SNIPPETS" str)
-         (and consult-recoll-inline-snippets consult-recoll--current))
+         (and consult-recoll-inline-snippets
+              (setq consult-recoll--current
+                    (propertize consult-recoll--current 'snippets t))))
         ((and consult-recoll-inline-snippets consult-recoll--current)
          (when-let* ((page (and (string-match "^\\([0-9]+\\) :" str)
                                 (match-string 1 str)))

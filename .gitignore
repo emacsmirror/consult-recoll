@@ -11,3 +11,7 @@
 # Undo-tree save-files
 *.~undo-tree
 
+
+# ELPA-generated files
+/consult-recoll-autoloads.el
+/consult-recoll-pkg.el

@@ -8,7 +8,7 @@
 ;; Package-Requires: ((emacs "26.1") (consult "0.18"))
 ;; Homepage: https://codeberg.org/jao/consult-recoll
 
-;; Copyright (C) 2021, 2022  Jose A Ortega Ruiz
+;; Copyright (C) 2021-2022  Free Software Foundation, Inc.
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by

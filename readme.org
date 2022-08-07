@@ -29,7 +29,7 @@ display its results, via [[https://github.com/minad/consult][consult]].  It is a
 package for vertical display of completions that works well with /consult/, such
 as [[https://github.com/minad/vertico][vertico]].
 
-[[https://codeberg.org/jao/consult-recoll/raw/commit/c57d3e791349619a62242b7a7faff77cb64e114b/consult-recoll.png]]
+[[https://codeberg.org/jao/consult-recoll/raw/branch/main/consult-recoll.png]]
 
 This package is part of [[http://elpa.gnu.org/packages/consult-recoll.html][GNU ELPA]], so for recent Emacs versions you can install
 it directly via =M-x package-install RET consult-recoll RET=.
@@ -114,14 +114,14 @@ it directly via =M-x package-install RET consult-recoll RET=.
     can set ~consult-recoll-inline-snippets~ to ~t~ to show them in the minibuffer,
     as individual candidates.
 
-    [[./consult-recoll-inline.png]]
+    [[https://codeberg.org/jao/consult-recoll/raw/branch/main/consult-recoll-inline.png]]
 
 ** Tip: disabling mime type groups
     By default, results are listed grouped by their mime type.  You can
     disable grouping by setting the customizable variable
     ~consult-recoll-group-by-mime~ to ~nil~.
 
-    [[./consult-recoll-no-groups.png]]
+    [[https://codeberg.org/jao/consult-recoll/raw/branch/main/consult-recoll-no-groups.png]]
 
 * Opening search results
    :PROPERTIES:

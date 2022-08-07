@@ -2,6 +2,12 @@
 
 #+begin_export html
 <p align=right>
+<a href="http://elpa.gnu.org/packages/consult-recoll.html">
+  <img alt="GNU ELPA" src="https://elpa.gnu.org/packages/consult-recoll.svg"/>
+</a>
+<a href="http://elpa.gnu.org/devel/consult-recoll.html">
+  <img alt="GNU-devel ELPA" src="https://elpa.gnu.org/devel/consult-recoll.svg"/>
+</a>
 <a href="https://melpa.org/#/consult-recoll">
   <img alt="MELPA" src="https://melpa.org/packages/consult-recoll-badge.svg"/>
 </a>
@@ -23,7 +29,10 @@ display its results, via [[https://github.com/minad/consult][consult]].  It is a
 package for vertical display of completions that works well with /consult/, such
 as [[https://github.com/minad/vertico][vertico]].
 
-[[./consult-recoll.png]]
+[[https://codeberg.org/jao/consult-recoll/raw/commit/c57d3e791349619a62242b7a7faff77cb64e114b/consult-recoll.png]]
+
+This package is part of [[http://elpa.gnu.org/packages/consult-recoll.html][GNU ELPA]], so for recent Emacs versions you can install
+it directly via =M-x package-install RET consult-recoll RET=.
 
 * Searching
 
@@ -148,5 +157,8 @@ as [[https://github.com/minad/vertico][vertico]].
 
 * Thanks
 
-  Thanks to [[https://codeberg.org/rougier][Nicholas P. Rougier]] for useful discussions and suggestions,
-  including actual fixes.
+  Thanks to
+
+  - [[https://codeberg.org/rougier][Nicholas P. Rougier]] for useful discussions and suggestions,
+    including actual fixes.
+  - [[https://codeberg.org/monnier][Stefan Monnier]] for setting up the GNU ELPA package.

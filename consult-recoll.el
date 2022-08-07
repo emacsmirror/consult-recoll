@@ -1,7 +1,7 @@
 ;;; consult-recoll.el --- Recoll queries using consult  -*- lexical-binding: t; -*-
 
 ;; Author: Jose A Ortega Ruiz <jao@gnu.org>
-;; Maintainer: Jose A Ortega Ruiz
+;; Maintainer: Jose A Ortega Ruiz <jao@gnu.org>
 ;; Keywords: docs, convenience
 ;; License: GPL-3.0-or-later
 ;; Version: 0.6.1

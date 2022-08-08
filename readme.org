@@ -34,6 +34,16 @@ as [[http://elpa.gnu.org/packages/vertico.html][vertico]].
 This package is part of [[http://elpa.gnu.org/packages/consult-recoll.html][GNU ELPA]], so for recent Emacs versions you can install
 it directly via =M-x package-install RET consult-recoll RET=.
 
+*** Tip: using consult-recoll with helm
+    If you use =helm-mode=, you'll need to disable helm's completing read for
+    =consult-recoll=, with something like:
+    #+begin_src emacs-lisp
+      (with-eval-after-load "helm"
+        (with-eval-after-load "recoll"
+          (add-to-list 'helm-completing-read-handlers-alist
+                       (cons #'consult-recoll nil))))
+    #+end_src
+
 * Searching
 
     The entry point of ~consult-recoll~ is the interactive command
@@ -172,3 +182,4 @@ it directly via =M-x package-install RET consult-recoll RET=.
   - [[https://codeberg.org/rougier][Nicholas P. Rougier]] for useful discussions and suggestions,
     including actual fixes.
   - [[https://codeberg.org/monnier][Stefan Monnier]] for setting up the GNU ELPA package.
+  - Johan Widén for tips on using consult-recoll with helm.

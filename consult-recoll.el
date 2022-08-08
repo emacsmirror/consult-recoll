@@ -236,5 +236,14 @@ With prefix argument ASK, the user is prompted for an initial query string."
                    (if (stringp ask) ask (read-string "Initial query: ")))))
     (consult-recoll--open (consult-recoll--search initial))))
 
+;;;###autoload
+(defun consult-recoll-embark-setup ()
+  "Set up integration with embark.
+In particular, allow opening candidates from embark-collect
+buffers."
+  (add-to-list 'embark-default-action-overrides
+               '(recoll-result . consult-recoll--open)))
+
+
 (provide 'consult-recoll)
 ;;; consult-recoll.el ends here

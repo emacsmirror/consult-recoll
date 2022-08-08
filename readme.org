@@ -25,9 +25,9 @@ a sophisticated query language, and, for some document kinds, snippets in the
 the found documents actually matching the query at hand.
 
 This package provides an emacs interface to perform recoll queries, and
-display its results, via [[https://github.com/minad/consult][consult]].  It is also recommened that you use a a
+display its results, via [[http://elpa.gnu.org/packages/consult.html][consult]].  It is also recommened that you use a a
 package for vertical display of completions that works well with /consult/, such
-as [[https://github.com/minad/vertico][vertico]].
+as [[http://elpa.gnu.org/packages/vertico.html][vertico]].
 
 [[https://codeberg.org/jao/consult-recoll/raw/branch/main/consult-recoll.png]]
 
@@ -108,6 +108,16 @@ it directly via =M-x package-install RET consult-recoll RET=.
 
       (setq consult-recoll-format-candidate #'jao-recoll-format)
     #+end_src
+
+** Integration with embark-collect
+   If you use [[http://elpa.gnu.org/packages/embark.html][embark]], you can use =embark-collect= to export the list of search
+   results in the minibuffer to an /Embark collect/ buffer.  To allow opening
+   buffer in that buffer as if they had been selected in the minibuffer,
+   enable integration with embark adding this call to your init file:
+
+   #+begin_src emacs-lisp
+     (consult-recoll-embark-setup)
+   #+end_src
 
 ** Tip: displaying snippets in results list
     Instead of relying on a separate preview buffer to display snippets, you

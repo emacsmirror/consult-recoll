@@ -131,19 +131,33 @@ Set to nil to use the default 'title (path)' format."
 (defsubst consult-recoll--snippets (&optional candidate)
   (get-text-property 0 'snippets (or candidate consult-recoll--current "")))
 
-(defsubst consult-recoll--find-file (file &optional _page) (find-file file))
+(defun consult-recoll--search-snippet (candidate mime)
+  "When CANDIDATE is the text of a snippet, search for it in current buffer."
+  (when (string-match "^\s+0 : " candidate)
+    (let ((txt (replace-match "" nil nil candidate)))
+      (goto-char (point-min))
+      (when (or (search-forward txt nil t)
+                (and (derived-mode-p 'org-mode)
+                     (search-forward (replace-regexp-in-string "\\]\\].+" ""
+                                                               txt nil t)))
+                (and (string= mime "text/html")
+                     (search-forward (substring txt 0 (/ (length txt) 2)) nil t)))
+        (goto-char (match-beginning 0))
+        (when (derived-mode-p 'org-mode) (org-reveal))))))
 
 (defun consult-recoll--open (candidate)
   "Open file of corresponding completion CANDIDATE."
   (when candidate
-    (let ((url (consult-recoll--candidate-url candidate))
-          (open (alist-get (consult-recoll--candidate-mime candidate)
-                           consult-recoll-open-fns
-                           (or consult-recoll-open-fn 'consult-recoll--find-file)
-                           nil 'string=)))
-      (if consult-recoll-inline-snippets
-          (funcall open url (consult-recoll--candidate-page candidate))
-        (funcall open url)))))
+    (let* ((url (consult-recoll--candidate-url candidate))
+           (mime (consult-recoll--candidate-mime candidate))
+           (open (or (cdr (assoc mime consult-recoll-open-fns))
+                     consult-recoll-open-fn
+                     (lambda (f &optional _ignored) (find-file f)))))
+      (if (not consult-recoll-inline-snippets)
+          (funcall open url)
+        (funcall open url (consult-recoll--candidate-page candidate))
+        (when (string-prefix-p "text/" mime)
+          (consult-recoll--search-snippet candidate mime))))))
 
 (defun consult-recoll--transformer (str)
   "Decode STR, as returned by recollq."

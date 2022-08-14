@@ -160,7 +160,12 @@ it directly via =M-x package-install RET consult-recoll RET=.
    If ~consult-recoll-inline-snippets~ is set, the functions above take two
    arguments: the URL of the file to open and, if present, the snippet page
    number (or ~nil~ if it is not available, e.g., because the selected candidate
-   is the one showing the document data)
+   is the one showing the document data).
+
+   If the selected candidate is a snippet corresponding to a text MIME and the
+   page number of the snippet is 0 (as is often the case, since text files are
+   normally not paginated), ~consult-recoll~ will perform a search for the
+   snippet text after opening the file.
 
    See also [[#embark][Integration with embark-collect]] for an alternative way of listing
    and opening search results using embark.

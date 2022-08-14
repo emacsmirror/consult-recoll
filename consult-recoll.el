@@ -138,10 +138,12 @@ Set to nil to use the default 'title (path)' format."
       (goto-char (point-min))
       (when (or (search-forward txt nil t)
                 (and (derived-mode-p 'org-mode)
-                     (search-forward (replace-regexp-in-string "\\]\\].+" ""
-                                                               txt nil t)))
+                     (let ((txt (replace-regexp-in-string "\\]\\].+" "" txt)))
+                       (search-forward txt nil t)))
                 (and (string= mime "text/html")
-                     (search-forward (substring txt 0 (/ (length txt) 2)) nil t)))
+                     (let ((mid (/ (length txt) 2)))
+                       (or (search-forward (substring txt 0 mid) nil t)
+                           (search-forward (substring txt mid) nil t)))))
         (goto-char (match-beginning 0))
         (when (derived-mode-p 'org-mode) (org-reveal))))))
 

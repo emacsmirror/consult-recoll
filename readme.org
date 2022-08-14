@@ -155,7 +155,8 @@ it directly via =M-x package-install RET consult-recoll RET=.
    When a search result candidate is selected, its MIME type is used to look
    up a function to open its associated file in the customizable variable
    ~consult-recoll-open-fns~.  If no entry is found, consult-recoll uses the
-   value of ~consult-open-fn~ as a default.
+   value of ~consult-open-fn~ as a default.  If the latter is not set,
+   ~eww-open-file~ is used for HTML files and ~find-file~ for the rest.
 
    If ~consult-recoll-inline-snippets~ is set, the functions above take two
    arguments: the URL of the file to open and, if present, the snippet page

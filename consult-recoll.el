@@ -42,6 +42,8 @@
 (require 'subr-x)
 (require 'consult)
 
+(declare-function 'eww-open-file "eww")
+
 (defgroup consult-recoll nil
   "Options for consult recoll."
   :group 'consult)
@@ -152,9 +154,11 @@ Set to nil to use the default 'title (path)' format."
   (when candidate
     (let* ((url (consult-recoll--candidate-url candidate))
            (mime (consult-recoll--candidate-mime candidate))
-           (open (or (cdr (assoc mime consult-recoll-open-fns))
-                     consult-recoll-open-fn
-                     (lambda (f &optional _ignored) (find-file f)))))
+           (open (cond ((cdr (assoc mime consult-recoll-open-fns)))
+                       (consult-recoll-open-fn)
+                       ((string= mime "text/html")
+                        (lambda (f &optional _ignored) (eww-open-file f)))
+                       (t (lambda (f &optional _ignored) (find-file f))))))
       (if (not consult-recoll-inline-snippets)
           (funcall open url)
         (funcall open url (consult-recoll--candidate-page candidate))

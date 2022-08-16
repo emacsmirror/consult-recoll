@@ -105,9 +105,6 @@ Set to nil to use the default 'title (path)' format."
   (setq consult-recoll--index 0)
   `("recollq" "-A" "-p" "5" ,@consult-recoll-search-flags ,text))
 
-(defconst consult-recoll--line-rx "^\\(.*?\\)\t\\[\\(.*?\\)\\]\t\\[\\(.*\\)\\]"
-  "Regular expression decomposing result lines returned by recollq")
-
 (defun consult-recoll--format (title urln mime)
   (if consult-recoll-format-candidate
       (funcall consult-recoll-format-candidate title urln mime)
@@ -123,6 +120,9 @@ Set to nil to use the default 'title (path)' format."
 
 (defsubst consult-recoll--candidate-url (candidate)
   (get-text-property 0 'url candidate))
+
+(defsubst consult-recoll--candidate-size (candidate)
+  (get-text-property 0 'size candidate))
 
 (defsubst consult-recoll--candidate-page (candidate)
   (get-text-property 0 'page candidate))
@@ -165,12 +165,17 @@ Set to nil to use the default 'title (path)' format."
         (when (string-prefix-p "text/" mime)
           (consult-recoll--search-snippet candidate mime))))))
 
+(defconst consult-recoll--line-rx
+  "^\\(.*?\\)\t\\[\\(.*?\\)\\]\t\\[\\(.*\\)\\]\\(\t\\([0-9]+\\)\\)?"
+  "Regular expression decomposing result lines returned by recollq")
+
 (defun consult-recoll--transformer (str)
   "Decode STR, as returned by recollq."
   (cond ((string-match consult-recoll--line-rx str)
          (let* ((mime (match-string 1 str))
                 (url (match-string 2 str))
                 (title (match-string 3 str))
+                (size (match-string 5 str))
                 (urln (if (string-prefix-p "file://" url) (substring url 7) url))
                 (idx (setq consult-recoll--index (1+ consult-recoll--index)))
                 (cand (consult-recoll--format title url mime))
@@ -178,7 +183,8 @@ Set to nil to use the default 'title (path)' format."
                                   'mime-type mime
                                   'url urln
                                   'title title
-                                  'index idx)))
+                                  'index idx
+                                  'size size)))
            (prog1 (and (not (consult-recoll--snippets)) consult-recoll--current)
              (setq consult-recoll--current cand))))
         ((string= "/SNIPPETS" str)

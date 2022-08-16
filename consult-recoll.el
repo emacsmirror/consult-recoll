@@ -142,10 +142,9 @@ Set to nil to use the default 'title (path)' format."
                 (and (derived-mode-p 'org-mode)
                      (let ((txt (replace-regexp-in-string "\\]\\].+" "" txt)))
                        (search-forward txt nil t)))
-                (and (string= mime "text/html")
-                     (let ((mid (/ (length txt) 2)))
-                       (or (search-forward (substring txt 0 mid) nil t)
-                           (search-forward (substring txt mid) nil t)))))
+                (let ((mid (/ (length txt) 2)))
+                  (or (search-forward (substring txt 0 mid) nil t)
+                      (search-forward (substring txt mid) nil t))))
         (goto-char (match-beginning 0))
         (when (derived-mode-p 'org-mode) (org-reveal))))))
 
@@ -162,7 +161,8 @@ Set to nil to use the default 'title (path)' format."
       (if (not consult-recoll-inline-snippets)
           (funcall open url)
         (funcall open url (consult-recoll--candidate-page candidate))
-        (when (string-prefix-p "text/" mime)
+        (when (or (string-prefix-p "text/" mime)
+                  (string-prefix-p "message/" mime))
           (consult-recoll--search-snippet candidate mime))))))
 
 (defconst consult-recoll--line-rx

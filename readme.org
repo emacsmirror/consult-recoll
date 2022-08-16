@@ -171,22 +171,38 @@ it directly via =M-x package-install RET consult-recoll RET=.
    See also [[#embark][Integration with embark-collect]] for an alternative way of listing
    and opening search results using embark.
 
-** Example: PDF open with external viewer
+** Example: opening PDFs with external viewer
 
     For instance, if you want to use ~zathura~ to open PDF documents, you could
     define an elisp helper like:
 
     #+begin_src emacs-lisp
-      (defun open-pdf/zathura (file &optional page)
+      (defun open-with-zathura (file &optional page)
         (shell-command (format "zathura %s -P %s" file (or page 1))))
     #+end_src
 
     and then add it to ~consult-recoll-open-fns~:
 
     #+begin_src emacs-lisp
-      (add-to-list 'consult-recoll-open-fns
-                   '("application/pdf" . open-pdf/zathura))
+      (add-to-list 'consult-recoll-open-fns '("application/pdf" . open-with-zathura))
     #+end_src
+
+** Example: Opening emails with notmuch
+   If you use [[https://notmuchmail.org/][notmuch]] and include your maildirs in recoll's indexed
+   directories, a simple way to open a candidate result given its file name is
+   to find out the message's ID and use ~notmuch.el~'s function ~notmuch-show~ to
+   open it:
+
+   #+begin_src emacs-lisp
+     (defun open-with-notmuch (file &optional _page)
+       (with-temp-buffer
+         (insert-file-contents-literally file)
+         (goto-char (point-min))
+         (and (re-search-forward "^Message-ID: <\\([^>]+\\)>$" nil t)
+              (notmuch-show (concat "id:" (match-string 1))))))
+
+     (add-to-list 'consult-recoll-open-fns '("message/rfc822" . open-with-notmuch))
+   #+end_src
 
 * Thanks
 

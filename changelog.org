@@ -1,4 +1,4 @@
-#+title Change log for consult-recoll
+#+title: Change log for consult-recoll
 
 * Version 0.7 on 2022-08-20
 

@@ -4,7 +4,7 @@
 ;; Maintainer: Jose A Ortega Ruiz <jao@gnu.org>
 ;; Keywords: docs, convenience
 ;; License: GPL-3.0-or-later
-;; Version: 0.6.2
+;; Version: 0.7
 ;; Package-Requires: ((emacs "26.1") (consult "0.18"))
 ;; Homepage: https://codeberg.org/jao/consult-recoll
 
@@ -234,6 +234,15 @@ Set to nil to use the default 'title (path)' format."
   "If TRANSFORM return candidate, othewise extract mime-type."
   (if transform candidate (consult-recoll--candidate-mime candidate)))
 
+(defun consult-recoll--annotation (candidate)
+  "Annotation for the given CANDIDATE (its size by default)"
+  (let* ((head (not (consult-recoll--candidate-page candidate)))
+         (size (consult-recoll--candidate-size candidate))
+         (mime (if head
+                   ""
+                 (format ", %s" (consult-recoll--candidate-mime candidate)))))
+    (format "     (%s bytes%s)" size mime)))
+
 (defun consult-recoll--search (&optional initial)
   "Perform an asynchronous recoll search via `consult--read'.
 If given, use INITIAL as the starting point of the query."
@@ -241,6 +250,7 @@ If given, use INITIAL as the starting point of the query."
                      #'consult-recoll--command
                    (consult--async-filter #'identity)
                    (consult--async-map #'consult-recoll--transformer))
+                 :annotate #'consult-recoll--annotation
                  :prompt consult-recoll-prompt
                  :require-match t
                  :lookup #'consult--lookup-member

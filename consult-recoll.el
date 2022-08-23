@@ -40,6 +40,8 @@
 
 (require 'seq)
 (require 'subr-x)
+(eval-when-compile (require 'cl-lib))
+
 (require 'consult)
 
 (declare-function 'eww-open-file "eww")
@@ -52,10 +54,21 @@
   "Prompt used by `consult-recoll'."
   :type 'string)
 
-(defcustom consult-recoll-search-flags '("-a")
-  "List of flags used to perform queries via recollq."
-  :type '(choice (const :tag "Query language" nil)
-                 (const :tag "All terms" ("-a"))
+(defcustom consult-recoll-search-flags 'query
+  "List of flags used to perform queries via recollq.
+
+The special values query and terms will select for you flags
+adequated to perform searches using recoll's query language or
+simply search for all provided terms, respectively.
+
+If you don't care about snippets and need speedier searches, you
+can also set this variable to the special values no-snippets or
+terms-no-snippets for query/all-terms searches that will return
+no snippets.."
+  :type '(choice (const :tag "Query language" query)
+                 (const :tag "All terms" terms)
+                 (const :tag "Query language sans snippets" no-snippets)
+                 (const :tag "All terms sans snippets" terms-no-snippets)
                  (list string)))
 
 (defcustom consult-recoll-open-fn nil
@@ -99,11 +112,23 @@ Set to nil to use the default 'title (path)' format."
 (defvar consult-recoll--current nil)
 (defvar consult-recoll--index 0)
 
+(defun consult-recoll--search-flags ()
+  "Compute search flags according to `consult-recoll-search-flags'."
+  (cond ((listp consult-recoll-search-flags)
+         consult-recoll-search-flags)
+        ((symbolp consult-recoll-search-flags)
+         (cl-case consult-recoll-search-flags
+           (terms '("-A" "-p" "5" "-a"))
+           (no-snippets '())
+           (terms-no-snippets '("-a"))
+           (t '("-A" "-p" "5"))))
+        (t (user-error "Invalid value of `consult-recoll-search-flags'"))))
+
 (defun consult-recoll--command (text)
   "Command used to perform queries for TEXT."
   (setq consult-recoll--current nil)
   (setq consult-recoll--index 0)
-  `("recollq" "-A" "-p" "5" ,@consult-recoll-search-flags ,text))
+  `("recollq" ,@(consult-recoll--search-flags) ,text))
 
 (defun consult-recoll--format (title urln mime)
   (if consult-recoll-format-candidate

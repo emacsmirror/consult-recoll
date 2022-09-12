@@ -1,36 +1,43 @@
 #+title: Change log for consult-recoll
 
+* Version 0.8
+
+  - Fully customizable recollq flags, allowing for instance suppression of
+    snippets at the search level when performance is a problem.
+
+  - Automatic jump to result's page number if in doc-view or pdf-view mode.
+
 * Version 0.7 on 2022-08-20
 
-  + Search for snippet text when opening text or message files, since they
+  - Search for snippet text when opening text or message files, since they
     cannot be located by page number.  The search might fail if emacs refills
     the contents (for instance when rendering HTML), but it's better than
     nothing.
 
-  + Use ~eww-open-file~ as the default function to open =text/html= documents,
+  - Use ~eww-open-file~ as the default function to open =text/html= documents,
     rather than ~find-file~.
 
-  + New function ~consult-recoll-embark-setup~ for optional Embark integration,
+  - New function ~consult-recoll-embark-setup~ for optional Embark integration,
     so that one can use ~embark-collect~.
 
 * Version 0.6.2 on 2022-08-07
 
-  + First release in GNU ELPA, with FSF copyright.
+  - First release in GNU ELPA, with FSF copyright.
 
 * Version 0.6.1 on 2022-08-05
 
-  + Fixes for inline snippet display.
+  - Fixes for inline snippet display.
 
 * Version 0.6 on 2022-08-04
 
-  + Inline snippets in the completion buffer, as selectable search results.
+  - Inline snippets in the completion buffer, as selectable search results.
 
-  + Grouping of search results by MIME type.
+  - Grouping of search results by MIME type.
 
 * Version 0.5 on 2022-07-22
 
-  + Live previews of search results, including snippets when available.
+  - Live previews of search results, including snippets when available.
 
 * Versions 0.3 to 0.4
 
-  + Initial feature set stabilisation.
+  - Initial feature set stabilisation.

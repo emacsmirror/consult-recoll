@@ -173,6 +173,16 @@ Set to nil to use the default 'title (path)' format."
         (goto-char (match-beginning 0))
         (when (derived-mode-p 'org-mode) (org-reveal))))))
 
+(declare-function 'doc-view-goto-page "doc-view")
+(declare-function 'pdf-view-goto-page "pdf-view")
+
+(defun consult-recoll--open-file (filename &optional page)
+  "Default function for opening result files."
+  (find-file filename)
+  (when page
+    (cond (derived-mode-p 'doc-view-mode) (doc-view-goto-page page)
+          (derived-mode-po 'pdf-view-mode) (pdf-view-goto-page page))))
+
 (defun consult-recoll--open (candidate)
   "Open file of corresponding completion CANDIDATE."
   (when candidate
@@ -182,7 +192,7 @@ Set to nil to use the default 'title (path)' format."
                        (consult-recoll-open-fn)
                        ((string= mime "text/html")
                         (lambda (f &optional _ignored) (eww-open-file f)))
-                       (t (lambda (f &optional _ignored) (find-file f))))))
+                       (t #'consult-recoll--open-file))))
       (if (not consult-recoll-inline-snippets)
           (funcall open url)
         (funcall open url (consult-recoll--candidate-page candidate))

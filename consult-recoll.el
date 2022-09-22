@@ -180,8 +180,8 @@ Set to nil to use the default 'title (path)' format."
   "Default function for opening result files."
   (find-file filename)
   (when page
-    (cond (derived-mode-p 'doc-view-mode) (doc-view-goto-page page)
-          (derived-mode-p 'pdf-view-mode) (pdf-view-goto-page page))))
+    (cond ((derived-mode-p 'doc-view-mode) (doc-view-goto-page page))
+          ((derived-mode-p 'pdf-view-mode) (pdf-view-goto-page page)))))
 
 (defun consult-recoll--open (candidate)
   "Open file of corresponding completion CANDIDATE."

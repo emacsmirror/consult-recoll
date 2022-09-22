@@ -1,4 +1,7 @@
-#+title: Recoll queries in emacs using consult
+#+TITLE: Recoll queries in emacs using consult
+#+EXPORT_FILE_NAME: consult-recoll.texi
+#+TEXINFO_DIR_CATEGORY: Emacs
+#+OPTIONS: d:nil
 
 #+begin_export html
 <p align=right>

@@ -96,7 +96,7 @@ number), otherwise just with one."
 
 (defcustom consult-recoll-format-candidate nil
   "A function taking title, path and mime type, and formatting them for display.
-Set to nil to use the default 'title (path)' format."
+Set to nil to use the default `title (path)' format."
   :type '(choice (const nil) function))
 
 (defface consult-recoll-url-face '((t :inherit link))
@@ -111,6 +111,7 @@ Set to nil to use the default 'title (path)' format."
 (defvar consult-recoll-history nil "History for `consult-recoll'.")
 (defvar consult-recoll--current nil)
 (defvar consult-recoll--index 0)
+(defvar consult-recoll--snippets nil)
 
 (defun consult-recoll--search-flags ()
   "Compute search flags according to `consult-recoll-search-flags'."
@@ -128,6 +129,7 @@ Set to nil to use the default 'title (path)' format."
   "Command used to perform queries for TEXT."
   (setq consult-recoll--current nil)
   (setq consult-recoll--index 0)
+  (setq consult-recoll--snippets nil)
   `("recollq" ,@(consult-recoll--search-flags) ,text))
 
 (defun consult-recoll--format (title urln mime)
@@ -155,10 +157,15 @@ Set to nil to use the default 'title (path)' format."
 (defsubst consult-recoll--candidate-index (candidate)
   (get-text-property 0 'index candidate))
 
-(defsubst consult-recoll--snippets (&optional candidate)
-  (get-text-property 0 'snippets (or candidate consult-recoll--current "")))
+(defsubst consult-recoll--snippets (candidate)
+  (let* ((len (length consult-recoll--snippets))
+         (idx (or (consult-recoll--candidate-index candidate) 0))
+         (pos (- len idx)))
+    (if (>= pos len)
+        ""
+      (mapconcat 'identity (reverse (elt consult-recoll--snippets pos)) "\n"))))
 
-(defun consult-recoll--search-snippet (candidate mime)
+(defun consult-recoll--search-snippet (candidate _mime)
   "When CANDIDATE is the text of a snippet, search for it in current buffer."
   (when (string-match "^\s+0 : " candidate)
     (let ((txt (replace-match "" nil nil candidate)))
@@ -220,14 +227,9 @@ Set to nil to use the default 'title (path)' format."
                                   'title title
                                   'index idx
                                   'size size)))
-           (prog1 (and (not (consult-recoll--snippets)) consult-recoll--current)
-             (setq consult-recoll--current cand))))
-        ((string= "/SNIPPETS" str)
-         (and (not consult-recoll-inline-snippets) consult-recoll--current))
-        ((string= "SNIPPETS" str)
-         (and consult-recoll-inline-snippets
-              (setq consult-recoll--current
-                    (propertize consult-recoll--current 'snippets t))))
+           (push () consult-recoll--snippets)
+           (setq consult-recoll--current cand)))
+        ((string-match-p "^/?SNIPPETS$" str) nil)
         ((and consult-recoll-inline-snippets consult-recoll--current)
          (when-let* ((page (and (string-match "^\\([0-9]+\\) :" str)
                                 (match-string 1 str)))
@@ -235,9 +237,7 @@ Set to nil to use the default 'title (path)' format."
                      (props (text-properties-at 0 consult-recoll--current)))
            (apply #'propertize (concat "    " str) 'page pageno props)))
         (consult-recoll--current
-         (let ((snippets (concat (consult-recoll--snippets) "\n" str)))
-           (setq consult-recoll--current
-                 (propertize consult-recoll--current 'snippets snippets)))
+         (push str (car consult-recoll--snippets))
          nil)))
 
 (defvar consult-recoll--preview-buffer "*consult-recoll preview*")
@@ -258,7 +258,8 @@ Set to nil to use the default 'title (path)' format."
              (insert (propertize url 'face 'consult-recoll-url-face) "\n")
              (insert (propertize (consult-recoll--candidate-mime candidate)
                                  'face 'consult-recoll-mime-face))
-             (when-let (s (consult-recoll--snippets candidate)) (insert "\n" s))
+             (when-let (s (consult-recoll--snippets candidate))
+               (insert "\n\n" s))
              (goto-char (point-min)))
            (pop-to-buffer buff)))
         ((eq action 'exit)

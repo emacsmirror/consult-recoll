@@ -269,14 +269,19 @@ Set to nil to use the default 'title (path)' format."
   "If TRANSFORM return candidate, othewise extract mime-type."
   (if transform candidate (consult-recoll--candidate-mime candidate)))
 
+(defun consult-recoll--format-size (bytes)
+  "Format the given size with adaptive units."
+  (let ((szn (string-to-number bytes)))
+    (cond ((< szn 1024) (format "%s bytes" szn))
+          ((< szn 1048576) (format "%.1f Kbs" (/ szn 1024.0)))
+          ((< szn 1073741824) (format "%.1f Mbs" (/ szn 1024 1024)))
+          (t (format "%.1fs Gbs" (/ szn 1024 1024 1024))))))
+
 (defun consult-recoll--annotation (candidate)
   "Annotation for the given CANDIDATE (its size by default)"
-  (let* ((head (not (consult-recoll--candidate-page candidate)))
-         (size (consult-recoll--candidate-size candidate))
-         (mime (if head
-                   ""
-                 (format ", %s" (consult-recoll--candidate-mime candidate)))))
-    (format "     (%s bytes%s)" size mime)))
+  (and (not (consult-recoll--candidate-page candidate))
+       (format " (%s)" (consult-recoll--format-size
+                        (consult-recoll--candidate-size candidate)))))
 
 (defun consult-recoll--search (&optional initial)
   "Perform an asynchronous recoll search via `consult--read'.

@@ -7,6 +7,9 @@
 
   - Automatic jump to result's page number if in doc-view or pdf-view mode.
 
+  - Fix: we were missing the last candidate when inline snippets were off (see
+    issue #8).
+
 * Version 0.7 on 2022-08-20
 
   - Search for snippet text when opening text or message files, since they
@@ -37,7 +40,3 @@
 * Version 0.5 on 2022-07-22
 
   - Live previews of search results, including snippets when available.
-
-* Versions 0.3 to 0.4
-
-  - Initial feature set stabilisation.

@@ -40,6 +40,8 @@
 
 (require 'seq)
 (require 'subr-x)
+(require 'files)
+
 (eval-when-compile (require 'cl-lib))
 
 (require 'consult)
@@ -272,11 +274,7 @@ Set to nil to use the default `title (path)' format."
 
 (defun consult-recoll--format-size (bytes)
   "Format the given size with adaptive units."
-  (let ((szn (string-to-number bytes)))
-    (cond ((< szn 1024) (format "%s bytes" szn))
-          ((< szn 1048576) (format "%.1f Kbs" (/ szn 1024.0)))
-          ((< szn 1073741824) (format "%.1f Mbs" (/ szn 1024 1024)))
-          (t (format "%.1fs Gbs" (/ szn 1024 1024 1024))))))
+  (file-size-human-readable (string-to-number bytes) nil " " "B"))
 
 (defun consult-recoll--annotation (candidate)
   "Annotation for the given CANDIDATE (its size by default)"

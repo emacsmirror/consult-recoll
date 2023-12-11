@@ -1,6 +1,11 @@
 #+title: Change log for consult-recoll
 
-* Version 0.8
+
+* Version O.8.1 on 2023-12-12
+
+  - Minor fixes.
+
+* Version 0.8 on 2022-10-13
 
   - Fully customizable recollq flags, allowing for instance suppression of
     snippets at the search level when performance is a problem.

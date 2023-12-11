@@ -46,7 +46,7 @@
 
 (require 'consult)
 
-(declare-function 'eww-open-file "eww")
+(declare-function eww-open-file "eww")
 
 (defgroup consult-recoll nil
   "Options for consult recoll."
@@ -182,8 +182,8 @@ Set to nil to use the default `title (path)' format."
         (goto-char (match-beginning 0))
         (when (derived-mode-p 'org-mode) (org-reveal))))))
 
-(declare-function 'doc-view-goto-page "doc-view")
-(declare-function 'pdf-view-goto-page "pdf-view")
+(declare-function doc-view-goto-page "doc-view")
+(declare-function pdf-view-goto-page "ext:pdf-view")
 
 (defun consult-recoll--open-file (filename &optional page)
   "Default function for opening result files."

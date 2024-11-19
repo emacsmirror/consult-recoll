@@ -8,7 +8,7 @@
 ;; Package-Requires: ((emacs "26.1") (consult "0.19"))
 ;; Homepage: https://codeberg.org/jao/consult-recoll
 
-;; Copyright (C) 2021-2023  Free Software Foundation, Inc.
+;; Copyright (C) 2021-2024  Free Software Foundation, Inc.
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -54,6 +54,15 @@
 
 (defcustom consult-recoll-prompt "Recoll search: "
   "Prompt used by `consult-recoll'."
+  :type 'string)
+
+(defcustom consult-recoll-program "recollq"
+  "Program (or full path to program) used to perform text searches.
+
+This is typically recollq if you have a standard recoll distribution,
+but can be also be set to recoll, or the full path to it if it's
+not in your PATH. In the latter case, you'll want to add -t to
+`consult-recoll-search-flags'."
   :type 'string)
 
 (defcustom consult-recoll-search-flags 'query
@@ -132,7 +141,7 @@ Set to nil to use the default `title (path)' format."
   (setq consult-recoll--current nil)
   (setq consult-recoll--index 0)
   (setq consult-recoll--snippets nil)
-  `("recollq" ,@(consult-recoll--search-flags) ,text))
+  `(,consult-recoll-program ,@(consult-recoll--search-flags) ,text))
 
 (defun consult-recoll--format (title urln mime)
   (if consult-recoll-format-candidate

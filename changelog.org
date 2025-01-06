@@ -1,6 +1,11 @@
 #+title: Change log for consult-recoll
 
 
+* Version 0.9 unreleased
+
+  - Upgrade to new consult async API
+  - Customizable recollq program path
+
 * Version O.8.1 on 2023-12-12
 
   - Minor fixes.

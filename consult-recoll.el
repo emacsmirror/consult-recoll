@@ -4,8 +4,8 @@
 ;; Maintainer: Jose A Ortega Ruiz <jao@gnu.org>
 ;; Keywords: docs, convenience
 ;; License: GPL-3.0-or-later
-;; Version: 0.8.1
-;; Package-Requires: ((emacs "26.1") (consult "0.19"))
+;; Version: 1.0
+;; Package-Requires: ((emacs "26.1") (consult "2.0"))
 ;; Homepage: https://codeberg.org/jao/consult-recoll
 
 ;; Copyright (C) 2021-2025  Free Software Foundation, Inc.

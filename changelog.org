@@ -1,7 +1,7 @@
 #+title: Change log for consult-recoll
 
 
-* Version 1.0 on 2024-01-05
+* Version 1.0.0 on 2024-01-05
 
   - Upgrade to new consult async API
   - Customizable recollq program path
